@@ -1,0 +1,81 @@
+<?php
+/*
+ *  Copyright 2023.  Baks.dev <admin@baks.dev>
+ *
+ *  Permission is hereby granted, free of charge, to any person obtaining a copy
+ *  of this software and associated documentation files (the "Software"), to deal
+ *  in the Software without restriction, including without limitation the rights
+ *  to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ *  copies of the Software, and to permit persons to whom the Software is furnished
+ *  to do so, subject to the following conditions:
+ *
+ *  The above copyright notice and this permission notice shall be included in all
+ *  copies or substantial portions of the Software.
+ *
+ *  THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ *  IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ *  FITNESS FOR A PARTICULAR PURPOSE AND NON INFRINGEMENT. IN NO EVENT SHALL THE
+ *  AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ *  LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ *  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+ *  THE SOFTWARE.
+ */
+
+declare(strict_types=1);
+
+namespace BaksDev\Centrifugo\Services\Token;
+
+use BaksDev\Centrifugo\Repository\CurrentUserProfile\CentrifugoCurrentUserProfileInterface;
+use BaksDev\Centrifugo\Service\JwtGenerator\JwtGenerator;
+use BaksDev\Centrifugo\Service\JwtGenerator\JwtGeneratorInterface;
+use BaksDev\Users\Profile\UserProfile\Type\Id\UserProfileUid;
+use BaksDev\Users\User\Type\Id\UserUid;
+
+final class JwtUserGenerator implements JwtGeneratorInterface
+{
+    private readonly JwtGenerator $jwtGenerator;
+
+    private readonly CentrifugoCurrentUserProfileInterface $profile;
+
+    private ?UserProfileUid $current;
+
+    private UserUid $user;
+
+    public function __construct(JwtGenerator $jwtGenerator, CentrifugoCurrentUserProfileInterface $profile)
+    {
+        $this->jwtGenerator = $jwtGenerator;
+        $this->profile = $profile;
+    }
+
+    public function generate(UserUid $user): ?string
+    {
+        $this->user = $user;
+
+        $this->current = $this->profile->getCurrentUserProfile($user, $this->jwtGenerator->getTtl());
+
+        if ($this->current) {
+            return $this->jwtGenerator->generateToken($this);
+        }
+
+        return null;
+    }
+
+    public function getTokenData(): array
+    {
+        return [
+            $this->user->getValue(),
+            [
+                'id' => $this->current->getValue(),
+                'event' => $this->current->getAttr(),
+            ],
+        ];
+
+//        return [
+//            $this->current->getValue(),
+//            [
+//                'id' => $this->user->getValue(),
+//                'event' => $this->current->getAttr(),
+//            ],
+//        ];
+    }
+}
