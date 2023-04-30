@@ -1,14 +1,14 @@
 {
-  "name": "baks-dev/contacts-region",
-  "description": "Модуль контактов базирования",
-  "homepage": "https://github.com/baks-dev/contacts-region",
+  "name": "baks-dev/centrifugo",
+  "description": "Модуль сокетов сервера Centrifugo",
+  "homepage": "https://github.com/baks-dev/centrifugo",
   "keywords": [
     "symfony",
     "bundle",
     "library",
     "module",
     "plugin",
-    "contacts",
+    "centrifugo",
     "baksdev"
   ],
   "license": "MIT",
@@ -21,11 +21,7 @@
   ],
   "require": {
     "php": ">=8.1",
-    "symfony/uid": "^6.2",
-    "symfony/security-bundle": "^6.2",
-    "doctrine/doctrine-bundle": "^2.8",
-    "baks-dev/core": "^6.2",
-    "baks-dev/reference-region": "^6.2"
+    "symfony/uid": "^6.2"
   },
   "require-dev": {
     "roave/security-advisories": "dev-latest",
@@ -33,7 +29,7 @@
   },
   "autoload": {
     "psr-4": {
-      "BaksDev\\Contacts\\Region\\": ""
+      "BaksDev\\Centrifugo\\": ""
     }
   },
   "config": {
