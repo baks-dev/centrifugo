@@ -27,7 +27,7 @@ CENTRIFUGO_SECRET=64189894-5408-4122-ba97-99d981268a62
 $ php bin/console doctrine:fixtures:load --append
 ```
 
-## Установка и настройка [Centrifugo](Centrifugo.md) 
+## Установка и настройка Centrifugo
 
 Установка [Centrifugo](Centrifugo.md)
 
