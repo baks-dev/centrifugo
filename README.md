@@ -16,9 +16,9 @@ $ composer require baks-dev/centrifugo
 
 ``` editorconfig
 ###> CENTRIFUGO ###
-CENTRIFUGO_API_KEY=38da5ad4-7df2-4c50-ad2e-6e7ff8ef95bc
+CENTRIFUGO_API_KEY=a7364217-0015-4afc-a775-9471962b5b8c
 CENTRIFUGO_API_ENDPOINT=https://baks.dev:8000
-CENTRIFUGO_SECRET=9c06afbb-e878-470e-8d00-c290768ebf79
+CENTRIFUGO_SECRET=64189894-5408-4122-ba97-99d981268a62
 ```
 
 Роли администартора с помощью Fixtures
