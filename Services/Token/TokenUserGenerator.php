@@ -26,14 +26,14 @@ declare(strict_types=1);
 namespace BaksDev\Centrifugo\Services\Token;
 
 use BaksDev\Centrifugo\Repository\CurrentUserProfile\CentrifugoCurrentUserProfileInterface;
-use BaksDev\Centrifugo\Service\JwtGenerator\JwtGenerator;
-use BaksDev\Centrifugo\Service\JwtGenerator\JwtGeneratorInterface;
+use BaksDev\Centrifugo\Services\JwtGenerator\JwtGeneratorInterface;
 use BaksDev\Users\Profile\UserProfile\Type\Id\UserProfileUid;
+use BaksDev\Users\User\Entity\User;
 use BaksDev\Users\User\Type\Id\UserUid;
 
-final class JwtUserGenerator implements JwtGeneratorInterface
+final class TokenUserGenerator implements TokenGeneratorInterface
 {
-    private readonly JwtGenerator $jwtGenerator;
+    private readonly JwtGeneratorInterface $jwtGenerator;
 
     private readonly CentrifugoCurrentUserProfileInterface $profile;
 
@@ -41,17 +41,17 @@ final class JwtUserGenerator implements JwtGeneratorInterface
 
     private UserUid $user;
 
-    public function __construct(JwtGenerator $jwtGenerator, CentrifugoCurrentUserProfileInterface $profile)
+    public function __construct(JwtGeneratorInterface $jwtGenerator, CentrifugoCurrentUserProfileInterface $profile)
     {
         $this->jwtGenerator = $jwtGenerator;
         $this->profile = $profile;
     }
 
-    public function generate(UserUid $user): ?string
+    public function generate(User|UserUid $user): ?string
     {
-        $this->user = $user;
+        $this->user = $user instanceof User ? $user->getId() : $user;
 
-        $this->current = $this->profile->getCurrentUserProfile($user, $this->jwtGenerator->getTtl());
+        $this->current = $this->profile->getCurrentUserProfile($this->user, $this->jwtGenerator->getTtl());
 
         if ($this->current) {
             return $this->jwtGenerator->generateToken($this);
@@ -63,11 +63,9 @@ final class JwtUserGenerator implements JwtGeneratorInterface
     public function getTokenData(): array
     {
         return [
-            $this->user->getValue(),
-            [
-                'id' => $this->current->getValue(),
-                'event' => $this->current->getAttr(),
-            ],
+            'sub' => (string) $this->user->getValue(),
+            'id' => (string) $this->current,
+            'event' => (string) $this->current->getAttr(),
         ];
 
 //        return [

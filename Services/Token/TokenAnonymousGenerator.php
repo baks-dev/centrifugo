@@ -23,11 +23,9 @@
 
 declare(strict_types=1);
 
-namespace BaksDev\Centrifugo\Services\JwtGenerator;
+namespace BaksDev\Centrifugo\Services\Token;
 
-use BaksDev\Centrifugo\Services\Token\TokenGeneratorInterface;
-
-interface JwtGeneratorInterface
+final class TokenAnonymousGenerator
 {
-    public function generateToken(TokenGeneratorInterface $payload): string;
+
 }

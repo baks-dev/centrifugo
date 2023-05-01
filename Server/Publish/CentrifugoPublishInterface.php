@@ -21,11 +21,15 @@
  *  THE SOFTWARE.
  */
 
-declare(strict_types=1);
+namespace BaksDev\Centrifugo\Server\Publish;
 
-namespace BaksDev\Centrifugo\Services\Token;
-
-final class JwtAnonymousGenerator
+interface CentrifugoPublishInterface
 {
+    public function addData(array $data): self;
 
+    public function send(string|array $channels): self;
+
+    public function isError(): bool;
+
+    public function getMessage(): array;
 }

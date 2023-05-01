@@ -23,7 +23,7 @@
 
 namespace Symfony\Component\DependencyInjection\Loader\Configurator;
 
-use BaksDev\Centrifugo\Service\JwtGenerator\JwtGenerator;
+use BaksDev\Centrifugo\Services\JwtGenerator\JwtGenerator;
 
 return static function (ContainerConfigurator $configurator) {
     $services = $configurator->services()
@@ -40,14 +40,18 @@ return static function (ContainerConfigurator $configurator) {
         ->tag('controller.service_arguments')
     ;
 
+    $services->load($namespace.'\Repository\\', __DIR__.'/../../Repository');
+
+    // $services->load($namespace.'\Listeners\\', __DIR__.'/../../Listeners');
+
+    $services->load($namespace.'\Services\\', __DIR__.'/../../Services');
+    $services->load($namespace.'\Server\\', __DIR__.'/../../Server');
+    $services->load($namespace.'\Command\\', __DIR__.'/../../Command');
+
     $services->set(JwtGenerator::class)
-        ->arg('$secret', env('CENTRIFUGO_SECRET'))
+        ->arg('$hmac', env('CENTRIFUGO_HMAC'))
         ->arg('$ttl', env('CENTRIFUGO_TTL'))
     ;
-
-    // $services->load($namespace.'\Repository\\', __DIR__.'/../../Repository');
-
-    // $services->load($namespace.'\Security\\', __DIR__.'/../../Security');
 
     // $services->load($namespace.'\UseCase\\', __DIR__.'/../../UseCase')
     //    ->exclude(__DIR__.'/../../UseCase/**/*DTO.php')

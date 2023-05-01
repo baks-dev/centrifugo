@@ -23,11 +23,45 @@
 
 declare(strict_types=1);
 
-namespace BaksDev\Centrifugo\Services\JwtGenerator;
+namespace BaksDev\Centrifugo\Server\Presence;
 
-use BaksDev\Centrifugo\Services\Token\TokenGeneratorInterface;
+use BaksDev\Centrifugo\Server\AuthCentrifugo;
 
-interface JwtGeneratorInterface
+final class CentrifugoPresence implements CentrifugoPresenceInterface
 {
-    public function generateToken(TokenGeneratorInterface $payload): string;
+    private AuthCentrifugo $centrifugo;
+
+    private array $content;
+
+    public function __construct(AuthCentrifugo $centrifugo)
+    {
+        $this->centrifugo = $centrifugo;
+    }
+
+    public function get(string $channel): self
+    {
+        $jsonParsedArray = [
+            'method' => 'presence',
+            'params' => [
+                'channel' => $channel,
+            ],
+        ];
+
+        $response = $this->centrifugo->getHttpClient()
+            ->request(
+                method: 'POST',
+                url: '/api',
+                options: ['json' => $jsonParsedArray]
+            )
+        ;
+
+        $this->content = $response->toArray();
+
+        return $this;
+    }
+
+    public function getContent(): array
+    {
+        return $this->content;
+    }
 }

@@ -23,8 +23,9 @@
 
 declare(strict_types=1);
 
-namespace BaksDev\Centrifugo\Service\JwtGenerator;
+namespace BaksDev\Centrifugo\Services\JwtGenerator;
 
+use BaksDev\Centrifugo\Services\Token\TokenGeneratorInterface;
 use JsonException;
 use function base64_encode;
 use function hash_hmac;
@@ -33,31 +34,36 @@ use function json_encode;
 use function str_replace;
 use const JSON_THROW_ON_ERROR;
 
-class JwtGenerator
+class JwtGenerator implements JwtGeneratorInterface
 {
     private const HMAC_ALGORITHM = 'sha256';
 
-    private readonly string $secret;
+    private readonly string $hmac;
     private int $ttl;
 
-    /** @see  */
-    public function __construct(string $secret, int $ttl)
+    /** @see */
+    public function __construct(string $hmac, int $ttl)
     {
-        $this->secret = $secret;
+        $this->hmac = $hmac;
         $this->ttl = $ttl;
     }
 
     /**
      * @throws JsonException
      */
-    public function generateToken(JwtGeneratorInterface $payload): string
+    public function generateToken(TokenGeneratorInterface $payload): string
     {
         $headerEncoded = $this->arrayBase64Encode([
             'typ' => 'JWT',
             'alg' => 'HS256',
         ]);
 
-        $payloadEncoded = $this->arrayBase64Encode($payload->getTokenData());
+        $payloadEncoded = $this->arrayBase64Encode(
+            array_merge(
+                $payload->getTokenData(),
+                ['exp' => (time() + $this->ttl)]
+            )
+        );
 
         return implode('.', [
             $headerEncoded,
@@ -76,10 +82,15 @@ class JwtGenerator
         return $this->stringBase64Encode($jsonEncode);
     }
 
+    public function getTtl(): int
+    {
+        return $this->ttl;
+    }
+
     private function buildSignaturePart(string $headerDecoded, string $payloadDecoded): string
     {
         $data = $headerDecoded.'.'.$payloadDecoded;
-        $hash = hash_hmac(self::HMAC_ALGORITHM, $data, $this->secret, true);
+        $hash = hash_hmac(self::HMAC_ALGORITHM, $data, $this->hmac, true);
 
         return $this->stringBase64Encode($hash);
     }
@@ -87,10 +98,5 @@ class JwtGenerator
     private function stringBase64Encode(string $string): string
     {
         return str_replace(['+', '/', '='], ['-', '_', ''], base64_encode($string));
-    }
-
-    public function getTtl(): int
-    {
-        return $this->ttl;
     }
 }

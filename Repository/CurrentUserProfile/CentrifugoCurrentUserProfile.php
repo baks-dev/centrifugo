@@ -86,7 +86,7 @@ final class CentrifugoCurrentUserProfile implements CentrifugoCurrentUserProfile
         $query->setLifetime($ttl);
 
         $query->setParameter('user', $user, UserUid::TYPE);
-        $qb->setParameter('status', new UserProfileStatus(UserProfileStatusEnum::ACTIVE), UserProfileStatus::TYPE);
+        $query->setParameter('status', new UserProfileStatus(UserProfileStatusEnum::ACTIVE), UserProfileStatus::TYPE);
 
         return $query->getOneOrNullResult();
     }

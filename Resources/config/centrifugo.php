@@ -18,14 +18,24 @@
 
 namespace Symfony\Component\DependencyInjection\Loader\Configurator;
 
+use BaksDev\Centrifugo\Server\AuthCentrifugo;
+
 return static function (ContainerConfigurator $configurator) {
-    
+    $services = $configurator->services()
+        ->defaults()
+        ->autowire()
+        ->autoconfigure()
+    ;
+
+    $services->set(AuthCentrifugo::class)
+        ->arg('$dsn', '%env(CENTRIFUGO_DSN)%')
+        ->arg('$key', '%env(CENTRIFUGO_API_KEY)%')
+    ;
+
     $param = $configurator->parameters();
 
     $param->set('centrifugo.ttl', '%env(CENTRIFUGO_TTL)%');  // 84600 = 1 день
-    $param->set('centrifugo.endpoint', '%env(CENTRIFUGO_API_ENDPOINT)%');
-    $param->set('centrifugo.secret', '%env(CENTRIFUGO_SECRET)%');
+    $param->set('centrifugo.dsn', '%env(CENTRIFUGO_DSN)%');
+    $param->set('centrifugo.secret', '%env(CENTRIFUGO_HMAC)%');
     $param->set('centrifugo.key', '%env(CENTRIFUGO_API_KEY)%');
-    
 };
-

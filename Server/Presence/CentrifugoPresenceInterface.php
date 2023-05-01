@@ -21,13 +21,11 @@
  *  THE SOFTWARE.
  */
 
-declare(strict_types=1);
+namespace BaksDev\Centrifugo\Server\Presence;
 
-namespace BaksDev\Centrifugo\Services\JwtGenerator;
-
-use BaksDev\Centrifugo\Services\Token\TokenGeneratorInterface;
-
-interface JwtGeneratorInterface
+interface CentrifugoPresenceInterface
 {
-    public function generateToken(TokenGeneratorInterface $payload): string;
+    public function get(string $channel): self;
+
+    public function getContent(): array;
 }
