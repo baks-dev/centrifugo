@@ -22,12 +22,6 @@ CENTRIFUGO_API_KEY=a7364217-0015-4afc-a775-9471962b5b8c
 CENTRIFUGO_TTL=3600
 ```
 
-Роли администартора с помощью Fixtures
-
-``` bash
-$ php bin/console doctrine:fixtures:load --append
-```
-
 ## Установка и настройка Centrifugo
 
 Установка [Centrifugo](Centrifugo.md)
