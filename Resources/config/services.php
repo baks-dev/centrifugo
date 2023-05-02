@@ -47,6 +47,7 @@ return static function (ContainerConfigurator $configurator) {
     $services->load($namespace.'\Services\\', __DIR__.'/../../Services');
     $services->load($namespace.'\Server\\', __DIR__.'/../../Server');
     $services->load($namespace.'\Command\\', __DIR__.'/../../Command');
+    $services->load($namespace.'\Listeners\\', __DIR__.'/../../Listeners');
 
     $services->set(JwtGenerator::class)
         ->arg('$hmac', env('CENTRIFUGO_HMAC'))
