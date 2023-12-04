@@ -1,0 +1,8 @@
+{
+  "namespaces": [
+    {
+      "namespace": "centrifugo",
+      "path": "Resources/view"
+    }
+  ]
+}
