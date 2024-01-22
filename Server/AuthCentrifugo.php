@@ -37,7 +37,11 @@ final class AuthCentrifugo
                 'Content-Type' => 'application/json',
             ]]
         )
-            ->withOptions(['base_uri' => 'https://'.$CENTRIFUGO_DSN])
+            ->withOptions([
+                'base_uri' => 'https://'.$CENTRIFUGO_DSN,
+                'verify_host' => false,
+                'verify_peer' => false
+            ])
         ;
     }
 
