@@ -35,7 +35,7 @@ use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Http\Attribute\CurrentUser;
 
 #[AsController]
-#[RoleSecurity('ROLE_USER')]
+//#[RoleSecurity('ROLE_USER')]
 class CentrifugoCredentialsController
 {
     #[Route('/centrifugo/credentials/user', name: 'centrifugo.credentials.user', methods: ['GET', 'POST'])]
@@ -44,11 +44,13 @@ class CentrifugoCredentialsController
         TokenUserGenerator $generator,
     ): JsonResponse
     {
-        if (!$usr) {
+        if(!$usr)
+        {
             return new JsonResponse(['token' => null], Response::HTTP_FORBIDDEN);
         }
 
         $token = $generator->generate($usr);
-         return new JsonResponse(['token' => $token], Response::HTTP_OK);
+
+        return new JsonResponse(['token' => $token], Response::HTTP_OK);
     }
 }
