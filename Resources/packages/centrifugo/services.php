@@ -23,6 +23,8 @@
 
 namespace Symfony\Component\DependencyInjection\Loader\Configurator;
 
+use BaksDev\Centrifugo\BaksDevCentrifugoBundle;
+
 return static function (ContainerConfigurator $configurator) {
     $services = $configurator->services()
         ->defaults()
@@ -30,14 +32,14 @@ return static function (ContainerConfigurator $configurator) {
         ->autoconfigure()
     ;
 
-    $NAMESPACE = 'BaksDev\Centrifugo\\';
-    $MODULE = substr(__DIR__, 0, strpos(__DIR__, "Resources"));
+    $NAMESPACE = BaksDevCentrifugoBundle::NAMESPACE;
+    $PATH = BaksDevCentrifugoBundle::PATH;
 
-    $services->load($NAMESPACE, $MODULE)
+    $services->load($NAMESPACE, $PATH)
         ->exclude([
-            $MODULE.'{Entity,Resources,Type}',
-            $MODULE.'**/*Message.php',
-            $MODULE.'**/*DTO.php',
+            $PATH.'{Entity,Resources,Type}',
+            $PATH.'**/*Message.php',
+            $PATH.'**/*DTO.php',
         ])
     ;
 
