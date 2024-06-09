@@ -1,6 +1,6 @@
 # BaksDev Centrifugo
 
-[![Version](https://img.shields.io/badge/version-7.1.1-blue)](https://github.com/baks-dev/centrifugo/releases)
+[![Version](https://img.shields.io/badge/version-7.1.2-blue)](https://github.com/baks-dev/centrifugo/releases)
 ![php 8.3+](https://img.shields.io/badge/php-min%208.3-red.svg)
 
 Модуль сокетов сервера Centrifugo
@@ -12,6 +12,12 @@ $ composer require baks-dev/centrifugo
 ```
 
 ## Дополнительно
+
+Установка конфигурации и файловых ресурсов:
+
+``` bash
+$ php bin/console baks:assets:install
+```
 
 * в файле .env указать настройки подключения (на пример домена baks.dev)
 * !!! указанные данные вымышленные
@@ -28,6 +34,11 @@ CENTRIFUGO_TTL=3600
 
 Установка [Centrifugo](Centrifugo.md)
 
+## Тестирование
+
+``` bash
+$ php bin/phpunit --group=centrifugo
+```
 
 ## Лицензия ![License](https://img.shields.io/badge/MIT-green)
 
