@@ -22,7 +22,7 @@ $ php bin/console baks:assets:install
 * в файле .env указать настройки подключения (на пример домена baks.dev)
 * !!! указанные данные вымышленные
 
-``` editorconfig
+``` dotenv
 ###> CENTRIFUGO ###
 CENTRIFUGO_DSN=baks.dev:8000
 CENTRIFUGO_HMAC=64189894-5408-4122-ba97-99d981268a62
