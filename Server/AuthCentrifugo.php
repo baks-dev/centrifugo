@@ -29,8 +29,7 @@ final class AuthCentrifugo
     public function __construct(
         #[Autowire(env: 'CENTRIFUGO_DSN')] string $CENTRIFUGO_DSN,
         #[Autowire(env: 'CENTRIFUGO_API_KEY')] string $CENTRIFUGO_API_KEY,
-    )
-    {
+    ) {
         $this->httpClient = HttpClient::create(
             ['headers' => [
                 'Authorization' => 'apikey '.$CENTRIFUGO_API_KEY,
@@ -41,8 +40,7 @@ final class AuthCentrifugo
                 'base_uri' => 'https://'.$CENTRIFUGO_DSN,
                 'verify_host' => false,
                 'verify_peer' => false
-            ])
-        ;
+            ]);
     }
 
     public function getHttpClient(): HttpClientInterface

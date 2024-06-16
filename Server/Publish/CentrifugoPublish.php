@@ -52,7 +52,8 @@ final class CentrifugoPublish implements CentrifugoPublishInterface
     /** Метод отправляет сообщение  */
     public function send(string|array $channels, int $delay = null): self
     {
-        if (is_array($channels)) {
+        if(is_array($channels))
+        {
             $jsonParsedArray = [
                 'method' => 'broadcast',
                 'params' => [
@@ -60,7 +61,9 @@ final class CentrifugoPublish implements CentrifugoPublishInterface
                     'data' => $this->data,
                 ],
             ];
-        } else {
+        }
+        else
+        {
             $jsonParsedArray = [
                 'method' => 'publish',
                 'params' => [
@@ -75,8 +78,7 @@ final class CentrifugoPublish implements CentrifugoPublishInterface
                 method: 'POST',
                 url: '/api',
                 options: ['json' => $jsonParsedArray]
-            )
-        ;
+            );
 
         if($delay)
         {
@@ -85,7 +87,8 @@ final class CentrifugoPublish implements CentrifugoPublishInterface
 
         $content = $response->toArray();
 
-        if (isset($content['error'])) {
+        if(isset($content['error']))
+        {
             $this->message = [$content['code'] => $content['message']];
         }
 
