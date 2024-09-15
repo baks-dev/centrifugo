@@ -1,6 +1,6 @@
 <?php
 /*
- *  Copyright 2024.  Baks.dev <admin@baks.dev>
+ *  Copyright 2023.  Baks.dev <admin@baks.dev>
  *
  *  Permission is hereby granted, free of charge, to any person obtaining a copy
  *  of this software and associated documentation files (the "Software"), to deal
@@ -24,15 +24,23 @@
 namespace Symfony\Component\DependencyInjection\Loader\Configurator;
 
 use BaksDev\Centrifugo\BaksDevCentrifugoBundle;
-use Symfony\Config\TwigConfig;
 
-return static function (TwigConfig $twig) {
+return static function (ContainerConfigurator $configurator) {
 
-    $twig->global('centrifugo_dsn')->value('%env(CENTRIFUGO_DSN)%');
+    $services = $configurator->services()
+        ->defaults()
+        ->autowire()
+        ->autoconfigure();
 
-    $twig->path(
-        BaksDevCentrifugoBundle::PATH.'Resources/view',
-        'centrifugo'
-    );
+    $NAMESPACE = BaksDevCentrifugoBundle::NAMESPACE;
+    $PATH = BaksDevCentrifugoBundle::PATH;
+
+    $services->load($NAMESPACE, $PATH)
+        ->exclude([
+            $PATH.'{Entity,Resources,Type}',
+            $PATH.'**'.DIRECTORY_SEPARATOR.'*Message.php',
+            $PATH.'**'.DIRECTORY_SEPARATOR.'*DTO.php',
+            $PATH.'**'.DIRECTORY_SEPARATOR.'*Test.php',
+        ]);
 
 };

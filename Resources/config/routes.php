@@ -21,26 +21,19 @@
  *  THE SOFTWARE.
  */
 
-namespace Symfony\Component\DependencyInjection\Loader\Configurator;
-
 use BaksDev\Centrifugo\BaksDevCentrifugoBundle;
+use Symfony\Component\Routing\Loader\Configurator\RoutingConfigurator;
 
-return static function (ContainerConfigurator $configurator) {
-    $services = $configurator->services()
-        ->defaults()
-        ->autowire()
-        ->autoconfigure()
-    ;
+return function (RoutingConfigurator $routes) {
 
-    $NAMESPACE = BaksDevCentrifugoBundle::NAMESPACE;
-    $PATH = BaksDevCentrifugoBundle::PATH;
+    $MODULE = BaksDevCentrifugoBundle::PATH;
 
-    $services->load($NAMESPACE, $PATH)
-        ->exclude([
-            $PATH.'{Entity,Resources,Type}',
-            $PATH.'**/*Message.php',
-            $PATH.'**/*DTO.php',
-        ])
-    ;
-
+    $routes->import(
+        $MODULE.'Controller',
+        'attribute',
+        false,
+        $MODULE.implode(DIRECTORY_SEPARATOR, ['Controller', '**', '*Test.php'])
+    )
+        ->prefix(\BaksDev\Core\Type\Locale\Locale::routes())
+        ->namePrefix('centrifugo:');
 };
