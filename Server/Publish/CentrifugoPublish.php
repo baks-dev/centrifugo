@@ -26,20 +26,24 @@ declare(strict_types=1);
 namespace BaksDev\Centrifugo\Server\Publish;
 
 use BaksDev\Centrifugo\Server\AuthCentrifugo;
+use Psr\Log\LoggerInterface;
+use Symfony\Component\HttpClient\Exception\TransportException;
 
 final class CentrifugoPublish implements CentrifugoPublishInterface
 {
-    private AuthCentrifugo $centrifugo;
-
     private array $data = [];
 
     private bool $error = false;
 
     private ?array $message = null;
 
-    public function __construct(AuthCentrifugo $centrifugo)
-    {
-        $this->centrifugo = $centrifugo;
+    private LoggerInterface $logger;
+
+    public function __construct(
+        private readonly AuthCentrifugo $centrifugo,
+        LoggerInterface $centrifugoLogger
+    ) {
+        $this->logger = $centrifugoLogger;
     }
 
     public function addData(array $data): self
@@ -73,12 +77,28 @@ final class CentrifugoPublish implements CentrifugoPublishInterface
             ];
         }
 
-        $response = $this->centrifugo->getHttpClient()
-            ->request(
-                method: 'POST',
-                url: '/api',
-                options: ['json' => $jsonParsedArray]
-            );
+        try
+        {
+            $response = $this->centrifugo->getHttpClient()
+                ->request(
+                    method: 'POST',
+                    url: '/api',
+                    options: ['json' => $jsonParsedArray]
+                );
+
+            if($response->getStatusCode() !== 200)
+            {
+                $this->logger->critical('centrifugo: Ошибка при оправке сокета', $jsonParsedArray);
+            }
+        }
+
+        /**
+         * Исключение возникает если Centrifugo не установлен либо не может подключиться к порту
+         */
+        catch(TransportException)
+        {
+            return $this;
+        }
 
         if($delay)
         {
