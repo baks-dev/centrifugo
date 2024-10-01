@@ -48,7 +48,7 @@ class CentrifugoPublishTest extends KernelTestCase
 
         if($publish->isError() === false)
         {
-            echo PHP_EOL.'Centrifugo не установлен, либо нет возможности отправить сокет';
+            echo PHP_EOL.'Centrifugo не установлен, либо нет возможности отправить сокет'.PHP_EOL;
         }
 
         self::assertTrue(true);
