@@ -1,17 +1,17 @@
 <?php
 /*
- *  Copyright 2023.  Baks.dev <admin@baks.dev>
- *
+ *  Copyright 2024.  Baks.dev <admin@baks.dev>
+ *  
  *  Permission is hereby granted, free of charge, to any person obtaining a copy
  *  of this software and associated documentation files (the "Software"), to deal
  *  in the Software without restriction, including without limitation the rights
  *  to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  *  copies of the Software, and to permit persons to whom the Software is furnished
  *  to do so, subject to the following conditions:
- *
+ *  
  *  The above copyright notice and this permission notice shall be included in all
  *  copies or substantial portions of the Software.
- *
+ *  
  *  THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  *  IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  *  FITNESS FOR A PARTICULAR PURPOSE AND NON INFRINGEMENT. IN NO EVENT SHALL THE
@@ -46,7 +46,8 @@ class JwtGenerator implements JwtGeneratorInterface
     public function __construct(
         #[Autowire(env: 'CENTRIFUGO_HMAC')] string $hmac,
         #[Autowire(env: 'CENTRIFUGO_TTL')] int $ttl
-    ) {
+    )
+    {
         $this->hmac = $hmac;
         $this->ttl = $ttl;
     }
@@ -86,9 +87,9 @@ class JwtGenerator implements JwtGeneratorInterface
         return $this->stringBase64Encode($jsonEncode);
     }
 
-    public function getTtl(): int
+    private function stringBase64Encode(string $string): string
     {
-        return $this->ttl;
+        return str_replace(['+', '/', '='], ['-', '_', ''], base64_encode($string));
     }
 
     private function buildSignaturePart(string $headerDecoded, string $payloadDecoded): string
@@ -99,8 +100,8 @@ class JwtGenerator implements JwtGeneratorInterface
         return $this->stringBase64Encode($hash);
     }
 
-    private function stringBase64Encode(string $string): string
+    public function getTtl(): int
     {
-        return str_replace(['+', '/', '='], ['-', '_', ''], base64_encode($string));
+        return $this->ttl;
     }
 }
