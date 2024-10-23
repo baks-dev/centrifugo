@@ -27,7 +27,7 @@ interface CentrifugoPublishInterface
 {
     public function addData(array $data): self;
 
-    public function send(string|array $channels, int $delay = null): self;
+    public function send(string|array $channels, ?int $delay = null): self;
 
     public function isError(): bool;
 
