@@ -55,7 +55,7 @@ final class CentrifugoPublish implements CentrifugoPublishInterface
     }
 
     /** Метод отправляет сообщение  */
-    public function send(string|array $channels, int $delay = null): self
+    public function send(string|array $channels, ?int $delay = null): self
     {
         if(is_array($channels))
         {
