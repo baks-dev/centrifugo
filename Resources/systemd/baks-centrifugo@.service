@@ -10,7 +10,7 @@
 # systemctl stop baks-centrifugo@1.service
 
 [Unit]
-Description=Symfony messenger centrifugo %i
+Description=centrifugo
 StartLimitBurst=5
 StartLimitIntervalSec=0
 

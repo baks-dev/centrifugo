@@ -55,7 +55,7 @@ $ sudo nano /etc/systemd/system/centrifugo.service
 
 ``` unit file (systemd)
 [Unit]
-Description=Symfony messenger centrifugo %i
+Description=centrifugo
 StartLimitBurst=5
 StartLimitIntervalSec=0
 
