@@ -11,8 +11,8 @@ cd /etc/centrifugo
 Скачиваем последнюю версию https://github.com/centrifugal/centrifugo/releases
 
 ``` bash
-wget https://github.com/centrifugal/centrifugo/releases/download/v4.1.3/centrifugo_4.1.3_linux_amd64.tar.gz
-tar zxvf centrifugo_4.1.3_linux_amd64.tar.gz
+wget https://github.com/centrifugal/centrifugo/releases/download/v5.4.8/centrifugo_5.4.8_linux_amd64.tar.gz
+tar zxvf centrifugo_5.4.8_linux_amd64.tar.gz
 mv centrifugo /usr/bin
 ```
 
