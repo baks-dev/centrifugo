@@ -7,7 +7,7 @@
 
 ## Cервер Centrifugo
 
-Установка и настройка [Centrifugo 4.1](Centrifugo.md)
+Установка и настройка [Centrifugo 5.4](Centrifugo.md)
 
 ## Установка
 
