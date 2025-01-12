@@ -60,7 +60,7 @@ StartLimitBurst=5
 StartLimitIntervalSec=0
 
 [Service]
-ExecStart=php /.....PATH_TO_PROJECT..../bin/console messenger:consume centrifugo --memory-limit=128m --time-limit=3600 --limit=100
+ExecStart=php /.....PATH_TO_PROJECT..../bin/console messenger:consume centrifugo centrifugo-low --memory-limit=128m --time-limit=3600 --limit=1000
 Restart=always
 
 User=unit
