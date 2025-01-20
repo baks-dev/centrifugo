@@ -1,6 +1,6 @@
 <?php
 /*
- *  Copyright 2024.  Baks.dev <admin@baks.dev>
+ *  Copyright 2025.  Baks.dev <admin@baks.dev>
  *  
  *  Permission is hereby granted, free of charge, to any person obtaining a copy
  *  of this software and associated documentation files (the "Software"), to deal
@@ -27,6 +27,7 @@ namespace BaksDev\Centrifugo\Server\Publish;
 
 use BaksDev\Centrifugo\Server\AuthCentrifugo;
 use Psr\Log\LoggerInterface;
+use Symfony\Component\DependencyInjection\Attribute\Target;
 use Symfony\Component\HttpClient\Exception\TransportException;
 
 final class CentrifugoPublish implements CentrifugoPublishInterface
@@ -37,15 +38,10 @@ final class CentrifugoPublish implements CentrifugoPublishInterface
 
     private ?array $message = null;
 
-    private LoggerInterface $logger;
-
     public function __construct(
+        #[Target('centrifugoLogger')] private readonly LoggerInterface $logger,
         private readonly AuthCentrifugo $centrifugo,
-        LoggerInterface $centrifugoLogger
-    )
-    {
-        $this->logger = $centrifugoLogger;
-    }
+    ) {}
 
     public function addData(array $data): self
     {
