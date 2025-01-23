@@ -79,7 +79,7 @@ executeFunc(function stWhECbst()
                             });
                     });
                 },
-                debug: true,
+                debug: typeof window.debug == 'undefined' ? false : window.debug,
             });
 
 
