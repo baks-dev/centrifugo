@@ -51,7 +51,7 @@ final class CentrifugoPublish implements CentrifugoPublishInterface
     }
 
     /** Метод отправляет сообщение  */
-    public function send(string|array $channels, ?int $delay = null): self
+    public function send(string|array $channels, ?int $delay = null): self|false
     {
         if(is_array($channels))
         {
@@ -86,15 +86,16 @@ final class CentrifugoPublish implements CentrifugoPublishInterface
             if($response->getStatusCode() !== 200)
             {
                 $this->logger->critical('centrifugo: Ошибка при оправке сокета', $jsonParsedArray);
+                return false;
             }
         }
 
+        catch(TransportException)
+        {
             /**
              * Исключение возникает если Centrifugo не установлен либо не может подключиться к порту
              */
-        catch(TransportException)
-        {
-            return $this;
+            return false;
         }
 
         if($delay)
@@ -104,9 +105,12 @@ final class CentrifugoPublish implements CentrifugoPublishInterface
 
         $content = $response->toArray();
 
+        $this->data = [];
+
         if(isset($content['error']))
         {
             $this->message = [$content['code'] => $content['message']];
+            return false;
         }
 
         $this->data = [];
