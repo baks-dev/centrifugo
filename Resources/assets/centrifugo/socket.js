@@ -44,6 +44,7 @@ executeFunc(function stWhECbst()
             return false;
         }
 
+
         centrifuge = new Centrifuge("wss://" + dsn + "/connection/websocket",
             {
                 token: token,
