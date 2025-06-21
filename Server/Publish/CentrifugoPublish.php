@@ -53,6 +53,9 @@ final class CentrifugoPublish implements CentrifugoPublishInterface
     /** Метод отправляет сообщение  */
     public function send(string|array $channels, ?int $delay = null): self|false
     {
+        $jsonParsedArray = false;
+
+        /** Отправляем данные в несколько каналов */
         if(is_array($channels))
         {
             $jsonParsedArray = [
@@ -63,7 +66,9 @@ final class CentrifugoPublish implements CentrifugoPublishInterface
                 ],
             ];
         }
-        else
+
+        /** Отправляем данные в один канал */
+        if(is_string($channels))
         {
             $jsonParsedArray = [
                 'method' => 'publish',
@@ -74,13 +79,18 @@ final class CentrifugoPublish implements CentrifugoPublishInterface
             ];
         }
 
+        if(false === $jsonParsedArray)
+        {
+            return false;
+        }
+
         try
         {
             $response = $this->centrifugo->getHttpClient()
                 ->request(
                     method: 'POST',
                     url: '/api',
-                    options: ['json' => $jsonParsedArray]
+                    options: ['json' => $jsonParsedArray],
                 );
 
             if($response->getStatusCode() !== 200)
@@ -110,10 +120,9 @@ final class CentrifugoPublish implements CentrifugoPublishInterface
         if(isset($content['error']))
         {
             $this->message = [$content['code'] => $content['message']];
+
             return false;
         }
-
-        $this->data = [];
 
         return $this;
     }
