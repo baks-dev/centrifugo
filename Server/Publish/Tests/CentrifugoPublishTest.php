@@ -26,15 +26,12 @@ declare(strict_types=1);
 namespace BaksDev\Centrifugo\Server\Publish\Tests;
 
 use BaksDev\Centrifugo\Server\Publish\CentrifugoPublishInterface;
-use BaksDev\Core\Doctrine\DBALQueryBuilder;
-use Doctrine\ORM\EntityManagerInterface;
+use PHPUnit\Framework\Attributes\Group;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Symfony\Component\DependencyInjection\Attribute\When;
 
-/**
- * @group centrifugo
- */
 #[When(env: 'test')]
+#[Group('centrifugo')]
 class CentrifugoPublishTest extends KernelTestCase
 {
     public function testUseCase(): void
