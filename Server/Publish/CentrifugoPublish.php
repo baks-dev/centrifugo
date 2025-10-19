@@ -81,6 +81,8 @@ final class CentrifugoPublish implements CentrifugoPublishInterface
 
         if(false === $jsonParsedArray)
         {
+            $this->error = true;
+
             return false;
         }
 
@@ -96,6 +98,9 @@ final class CentrifugoPublish implements CentrifugoPublishInterface
             if($response->getStatusCode() !== 200)
             {
                 $this->logger->critical('centrifugo: Ошибка при оправке сокета', $jsonParsedArray);
+
+                $this->error = true;
+
                 return false;
             }
         }
@@ -105,6 +110,9 @@ final class CentrifugoPublish implements CentrifugoPublishInterface
             /**
              * Исключение возникает если Centrifugo не установлен либо не может подключиться к порту
              */
+
+            $this->error = true;
+
             return false;
         }
 
@@ -120,6 +128,8 @@ final class CentrifugoPublish implements CentrifugoPublishInterface
         if(isset($content['error']))
         {
             $this->message = [$content['code'] => $content['message']];
+
+            $this->error = true;
 
             return false;
         }
