@@ -139,7 +139,7 @@ final class CentrifugoPublish implements CentrifugoPublishInterface
 
     public function isError(): bool
     {
-        return $this->error;
+        return $this->error === true;
     }
 
     public function getMessage(): array
