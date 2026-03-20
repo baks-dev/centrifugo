@@ -19,6 +19,7 @@
  *  LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
  *  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  *  THE SOFTWARE.
+ *
  */
 
 declare(strict_types=1);
@@ -30,6 +31,9 @@ use Psr\Log\LoggerInterface;
 use Symfony\Component\DependencyInjection\Attribute\Target;
 use Symfony\Component\HttpClient\Exception\TransportException;
 
+/**
+ * @see https://centrifugal.dev/docs/server/server_api#http-api
+ */
 final class CentrifugoPublish implements CentrifugoPublishInterface
 {
     private array $data = [];
@@ -45,12 +49,14 @@ final class CentrifugoPublish implements CentrifugoPublishInterface
 
     public function addData(array $data): self
     {
-        $this->data = array_merge($data, $this->data);
+        $this->data = array_merge($this->data, $data);
 
         return $this;
     }
 
-    /** Метод отправляет сообщение  */
+    /**
+     * Метод отправляет сообщение в канал
+     */
     public function send(string|array $channels, ?int $delay = null): self|false
     {
         $jsonParsedArray = false;
