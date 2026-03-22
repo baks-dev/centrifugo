@@ -32,7 +32,7 @@ return static function(TwigConfig $twig) {
 
     $twig->path(
         BaksDevCentrifugoBundle::PATH.implode(DIRECTORY_SEPARATOR, ['Resources', 'view', '']), //.'Resources/view',
-        'centrifugo'
+        'centrifugo',
     );
 
 };

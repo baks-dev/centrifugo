@@ -66,8 +66,8 @@ class JwtGenerator implements JwtGeneratorInterface
         $payloadEncoded = $this->arrayBase64Encode(
             array_merge(
                 $payload->getTokenData(),
-                ['exp' => (time() + $this->ttl)]
-            )
+                ['exp' => (time() + $this->ttl)],
+            ),
         );
 
         return implode('.', [

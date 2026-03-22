@@ -40,12 +40,12 @@ final class AuthCentrifugo
             ['headers' => [
                 'Authorization' => 'apikey '.$CENTRIFUGO_API_KEY,
                 'Content-Type' => 'application/json',
-            ]]
+            ]],
         )
             ->withOptions([
                 'base_uri' => 'https://'.$CENTRIFUGO_DSN,
                 'verify_host' => false,
-                'verify_peer' => false
+                'verify_peer' => false,
             ]);
     }
 

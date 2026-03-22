@@ -51,7 +51,7 @@ final class CentrifugoPresence implements CentrifugoPresenceInterface
             ->request(
                 method: 'POST',
                 url: '/api',
-                options: ['json' => $jsonParsedArray]
+                options: ['json' => $jsonParsedArray],
             );
 
         $this->content = $response->toArray();

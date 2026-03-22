@@ -34,7 +34,7 @@ final class TokenUserGenerator implements TokenGeneratorInterface
 
     private User $usr;
 
-    public function __construct(JwtGeneratorInterface $jwtGenerator,)
+    public function __construct(JwtGeneratorInterface $jwtGenerator)
     {
         $this->jwtGenerator = $jwtGenerator;
     }

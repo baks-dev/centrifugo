@@ -34,7 +34,7 @@
 
 executeFunc(function stWhECbst()
 {
-    if(typeof Centrifuge === 'function')
+    if(typeof Centrifuge === "function")
     {
         const dsn = window.centrifugo_dsn; // Получаем значение dsn
         const token = window.centrifugo_token; // Получаем значение token
@@ -47,40 +47,34 @@ executeFunc(function stWhECbst()
 
         centrifuge = new Centrifuge("wss://" + dsn + "/connection/websocket",
             {
-                token: token,
-                getToken: function(ctx)
+                token : token,
+                getToken : function(ctx)
                 {
                     return new Promise((resolve, reject) =>
                     {
-                        fetch('/centrifugo/credentials/user', {
-                            method: 'POST',
-                            headers: new Headers({'Content-Type': 'application/json'}),
-                            body: JSON.stringify(ctx)
-                        })
-
-                            .then(res =>
+                        fetch("/centrifugo/credentials/user", {
+                            method : "POST",
+                            headers : new Headers({"Content-Type" : "application/json"}),
+                            body : JSON.stringify(ctx),
+                        }).then(res =>
+                        {
+                            if(!res.ok)
                             {
-                                if(!res.ok)
-                                {
-                                    throw new Error(`Unexpected status code ${res.status}`);
-                                }
+                                throw new Error(`Unexpected status code ${res.status}`);
+                            }
 
-                                return res.json();
+                            return res.json();
 
-                            })
-
-                            .then(data =>
-                            {
-                                resolve(data.token);
-                            })
-
-                            .catch(err =>
-                            {
-                                reject(err);
-                            });
+                        }).then(data =>
+                        {
+                            resolve(data.token);
+                        }).catch(err =>
+                        {
+                            reject(err);
+                        });
                     });
                 },
-                debug: typeof window.debug == 'undefined' ? false : window.debug,
+                debug : typeof window.debug == "undefined" ? false : window.debug,
             });
 
 
@@ -92,4 +86,4 @@ executeFunc(function stWhECbst()
 
     return false;
 
-})
+});
