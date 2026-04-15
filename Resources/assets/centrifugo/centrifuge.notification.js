@@ -23,23 +23,13 @@
 
 /** Уведомления */
 
-let reload__qKWmx1KEt = 100;
-
-setTimeout(function init_centrifugo_notification_qKWmx1KEt()
+executeFunc(function init_centrifugo_notification_qKWmx1KEt()
 {
 
     if(typeof centrifuge !== "object")
     {
-        if(reload__qKWmx1KEt > 1000)
-        { return; }
-
-        reload__qKWmx1KEt = reload__qKWmx1KEt * 2;
-        return setTimeout(init_centrifugo_notification_qKWmx1KEt, reload__qKWmx1KEt);
+        return false;
     }
-
-    //console.log('centrifugo_token ->', window.centrifugo_token)
-    //console.log('profile_id ->', window.profile_id)
-    //console.log('current_profile ->', window.current_profile)
 
     if(window.current_profile)
     {
@@ -49,7 +39,6 @@ setTimeout(function init_centrifugo_notification_qKWmx1KEt()
 
         personal_notification_channel.on("publication", function(ctx)
         {
-            //console.log('ctx ->', ctx)
 
             if(ctx.data.profile === window.current_profile)
             {
@@ -75,7 +64,6 @@ setTimeout(function init_centrifugo_notification_qKWmx1KEt()
 
         profile_notification_channel.on("publication", function(ctx)
         {
-            //console.log('ctx ->', ctx)
 
             if(ctx.data.profile === window.profile_id)
             {
@@ -91,5 +79,6 @@ setTimeout(function init_centrifugo_notification_qKWmx1KEt()
         }).subscribe();
     }
 
+    return true;
 
 }, 100);

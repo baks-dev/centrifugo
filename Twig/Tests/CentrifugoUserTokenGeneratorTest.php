@@ -24,20 +24,20 @@
 
 namespace BaksDev\Centrifugo\Twig\Tests;
 
-use BaksDev\Centrifugo\Twig\UserTokenGenerator;
+use BaksDev\Centrifugo\Twig\CentrifugoUserTokenGenerator;
 use PHPUnit\Framework\Attributes\Group;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Symfony\Component\DependencyInjection\Attribute\When;
 
 #[Group('centrifugo')]
 #[When(env: 'test')]
-class UserTokenGeneratorTest extends KernelTestCase
+class CentrifugoUserTokenGeneratorTest extends KernelTestCase
 {
     public function testExtension(): void
     {
 
-        /** @var UserTokenGenerator $UserTokenGenerator */
-        $UserTokenGenerator = self::getContainer()->get(UserTokenGenerator::class);
+        /** @var CentrifugoUserTokenGenerator $UserTokenGenerator */
+        $UserTokenGenerator = self::getContainer()->get(CentrifugoUserTokenGenerator::class);
 
         self::assertTrue(true);
         return;

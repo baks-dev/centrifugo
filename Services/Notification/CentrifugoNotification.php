@@ -31,6 +31,7 @@ use BaksDev\Centrifugo\Server\Publish\CentrifugoPublish;
 use BaksDev\Core\Messenger\MessageDispatchInterface;
 use BaksDev\Support\BaksDevSupportBundle;
 use BaksDev\Support\Messenger\Notification\AddSupportNotificationMessage;
+use BaksDev\Users\Profile\UserProfile\Repository\CurrentUserProfile\CurrentUserProfileDTO;
 use BaksDev\Users\Profile\UserProfile\Repository\CurrentUserProfile\CurrentUserProfileInterface;
 use BaksDev\Users\Profile\UserProfile\Type\Id\UserProfileUid;
 use BaksDev\Users\User\Type\Id\UserUid;
@@ -76,8 +77,20 @@ final class CentrifugoNotification
     {
         if($receiver instanceof UserUid)
         {
-            $CurrentUserProfileDTO = $this->currentUserProfileRepository?->getCurrentUserProfile(new UserUid($receiver));
-            $receiver = $CurrentUserProfileDTO?->getId();
+            /** Если не подключен модуль users-user */
+            if(false === ($this->currentUserProfileRepository instanceof CurrentUserProfileInterface))
+            {
+                return $this;
+            }
+
+            $CurrentUserProfileDTO = $this->currentUserProfileRepository->getCurrentUserProfile(new UserUid($receiver));
+
+            if(false === ($CurrentUserProfileDTO instanceof CurrentUserProfileDTO))
+            {
+                return $this;
+            }
+
+            $receiver = $CurrentUserProfileDTO->getId();
         }
 
         $this->profile = $receiver;
@@ -95,7 +108,7 @@ final class CentrifugoNotification
         /**
          * Если не был установлен получатель - не реагируем
          */
-        if(false === $this->profile instanceof UserProfileUid)
+        if(false === ($this->profile instanceof UserProfileUid))
         {
             $this->logger->warning(
                 message: 'centrifugo: Не установлен получатель для отправки уведомления',
@@ -113,7 +126,7 @@ final class CentrifugoNotification
         /**
          * Если не было добавлено уведомление - не реагируем
          */
-        if(false === $this->notification instanceof CentrifugoNotificationDTO)
+        if(false === ($this->notification instanceof CentrifugoNotificationDTO))
         {
             $this->logger->warning(
                 message: 'centrifugo: Попытка отправки пустого уведомления',
@@ -133,6 +146,7 @@ final class CentrifugoNotification
             ->get($channel, true) // минимум информации
             ->isPresence();
 
+        /** Если null - ошибка получения ответа от Centrifugo */
         if(null === $isPresence)
         {
             return;
@@ -179,14 +193,6 @@ final class CentrifugoNotification
 
             if(false === class_exists(BaksDevSupportBundle::class))
             {
-                $this->logger->critical(
-                    message: 'centrifugo: Не возможно сохранить уведомление - не установлен модуль '.BaksDevSupportBundle::class,
-                    context: [
-                        $channel,
-                        self::class.':'.__LINE__,
-                    ],
-                );
-
                 return;
             }
 
@@ -195,21 +201,18 @@ final class CentrifugoNotification
              * Сохраняем уведомление асинхронно
              */
 
-            if(true === class_exists(BaksDevSupportBundle::class))
-            {
-                $data = json_encode($this->notification->toArray());
+            $data = json_encode($this->notification->toArray());
 
-                $message = new AddSupportNotificationMessage(
-                    data: $data,
-                    profile: $this->profile,
+            $message = new AddSupportNotificationMessage(
+                data: $data,
+                profile: $this->profile,
+            );
+
+            $this->messageDispatch
+                ->dispatch(
+                    message: $message,
+                    transport: 'support',
                 );
-
-                $this->messageDispatch
-                    ->dispatch(
-                        message: $message,
-                        transport: 'support',
-                    );
-            }
         }
     }
 }

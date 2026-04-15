@@ -48,7 +48,8 @@ class CentrifugoNotificationDebugTest extends KernelTestCase
         $notification = new CentrifugoNotificationDTO(
             type: 'type',
             header: 'header',
-            message: 'message'
+            message: 'message',
+            identifier: uniqid()
         );
 
         $CentrifugoNotification

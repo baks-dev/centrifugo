@@ -27,7 +27,10 @@ declare(strict_types=1);
 namespace BaksDev\Centrifugo\Services\Notification;
 
 /**
- * Объект для уведомления, обрабатываемого CentrifugoNotification
+ * Объект уведомления, обрабатываемого CentrifugoNotification
+ *
+ * @note параметры $type, $header, $message отображают структуру шаблона сообщения, отправляемого на UI
+ * @note параметр $identifier необходим для создания уникальности сообщения
  */
 final readonly class CentrifugoNotificationDTO
 {
@@ -35,21 +38,30 @@ final readonly class CentrifugoNotificationDTO
         private string $type,
         private string $header,
         private string $message,
+        private string $identifier,
     ) {}
 
+    /** Тип сообщения: danger, success */
     public function getType(): string
     {
         return $this->type;
     }
 
+    /** Текст заголовка сообщения */
     public function getHeader(): string
     {
         return $this->header;
     }
 
+    /** Текст сообщения */
     public function getMessage(): string
     {
         return $this->message;
+    }
+
+    public function getIdentifier(): string
+    {
+        return $this->identifier;
     }
 
     public function toArray(): array
@@ -58,6 +70,7 @@ final readonly class CentrifugoNotificationDTO
             'type' => $this->type,
             'header' => $this->header,
             'message' => $this->message,
+            'identifier' => $this->identifier,
         ];
     }
 }

@@ -37,7 +37,7 @@ use Twig\TwigFunction;
 /**
  * Генерирует токен по uid пользователя
  */
-final class UserTokenGenerator extends AbstractExtension
+final class CentrifugoUserTokenGenerator extends AbstractExtension
 {
 
     public function __construct(
@@ -49,7 +49,7 @@ final class UserTokenGenerator extends AbstractExtension
     public function getFunctions(): array
     {
         return [
-            new TwigFunction('user_token', $this->getUserToken(...)),
+            new TwigFunction('centrifugo_user_token', $this->getUserToken(...)),
         ];
     }
 
